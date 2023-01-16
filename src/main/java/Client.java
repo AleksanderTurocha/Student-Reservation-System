@@ -1,7 +1,5 @@
-import model.*;
-
-import java.net.*;
 import java.io.*;
+import java.net.Socket;
 import java.util.Scanner;
 
 public class Client {
@@ -14,9 +12,8 @@ public class Client {
         PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
         Scanner scanner = new Scanner(System.in);
-        while(true)
-        {
-            System.out.println("Welcome to Student Dormitory Reservation System");
+        System.out.println("Welcome to Student Dormitory Reservation System");
+        while (true) {
             System.out.println("Menu:");
             System.out.println("1 - Create new Student");
 //            System.out.println("2 - Create new Room");
@@ -27,40 +24,41 @@ public class Client {
 //            System.out.println("7 - Find student");
 //            System.out.println("8 - Assign student to room and dormitory");
 //            System.out.println("9 - Delete student");
-//            System.out.println("0 - Exit program");
+            System.out.println("0 - Exit program");
 
 
             int choice = scanner.nextInt();
-
+            scanner.nextLine();
             // Creating new student
-            if (choice == 1)
-            {
+            if (choice == 1) {
                 System.out.println("Create new student:");
                 System.out.println("Input first name: ");
+
                 String firstName = scanner.nextLine();
-                scanner.nextLine();
+
                 System.out.println("Input last name: ");
                 String lastName = scanner.nextLine();
                 System.out.println("wysylam do serwera");
+                System.out.println("1;" + firstName + ";" + lastName);
                 out.println("1;" + firstName + ";" + lastName);
 
                 String response = in.readLine();
                 System.out.println(response + "<-wiadomosc od serwera");
             }
 //            // Creating new room
-            else if(choice == 2)
-            {
-                System.out.println("Input door number: ");
-                long doorNumber = scanner.nextLong();
-
-                out.println("Created new room: " + doorNumber);
-
-                String response = in.readLine();
-                System.out.println(response);
+            else if (choice == 2) {
+                System.out.println("wybor drigi pisze client");
+                out.println("2");
+//                System.out.println("Input door number: ");
+//                long doorNumber = scanner.nextLong();
+//
+//                out.println("Created new room: " + doorNumber);
+//
+//                String response = in.readLine();
+//                System.out.println(response);
             }
 //            // Creating new dormitory
-            else if (choice == 3)
-            {
+            else if (choice == 3) {
                 System.out.println("Input dormitory name:");
                 String name = scanner.nextLine();
                 System.out.println("Input dormitory standard:");
@@ -72,67 +70,64 @@ public class Client {
                 System.out.println(response);
             }
             // Display students
-            else if (choice == 4)
-            {
+            else if (choice == 4) {
                 out.println("Displaying students");
 
-                DataInputStream din=new DataInputStream(socket.getInputStream());
-                String response=din.readUTF();
-                System.out.println("Server response:\n"+response);
+                DataInputStream din = new DataInputStream(socket.getInputStream());
+                String response = din.readUTF();
+                System.out.println("Server response:\n" + response);
             }
             // Display rooms
-            else if (choice == 5)
-            {
+            else if (choice == 5) {
                 out.println("Displaying rooms");
 
-                DataInputStream din=new DataInputStream(socket.getInputStream());
-                String response=din.readUTF();
-                System.out.println("Server response:\n"+response);
+                DataInputStream din = new DataInputStream(socket.getInputStream());
+                String response = din.readUTF();
+                System.out.println("Server response:\n" + response);
             }
             // Display dormitories
-            else if(choice == 6)
-            {
+            else if (choice == 6) {
                 out.println("Displaying dormitories");
 
-                DataInputStream din=new DataInputStream(socket.getInputStream());
-                String response=din.readUTF();
-                System.out.println("Server response:\n"+response);
+                DataInputStream din = new DataInputStream(socket.getInputStream());
+                String response = din.readUTF();
+                System.out.println("Server response:\n" + response);
             }
             // Find student
-            else if(choice == 7)
-            {
+            else if (choice == 7) {
                 System.out.println("Input first name: ");
                 String name = scanner.nextLine();
                 System.out.println("Input last name:");
                 String lastName = scanner.nextLine();
 
-                out.println("Finding student - " + name + " " + lastName);
+                out.println("7;" + name + ";" + lastName);
 
                 DataInputStream din=new DataInputStream(socket.getInputStream());
-                String response=din.readUTF();
-                System.out.println("Server response:\n"+response);
+                String responseData=din.readUTF();
+                System.out.println("Server response:\n"+responseData);
+
+                String response = in.readLine();
+                System.out.println(response + "<-randomowa wiadomosc od serwera");
             }
             // Assign student to room and dormitory
-            else if(choice == 8)
-            {
+            else if (choice == 8) {
                 //TODO wnetrze
             }
             // Delete student
-            else if(choice == 9)
-            {
+            else if (choice == 9) {
                 //TODO wnetrze
             }
             // Exit program
-            else if(choice == 0) {
+            else if (choice == 0) {
                 System.out.println("Exiting system");
+                out.println("uzytkownik opuscil polaczenie");
+                socket.close();
                 break;
-            }
-            else
-            {
+            } else {
                 System.out.println("Unknown option, please choose another");
             }
         }
 
-        socket.close();
+//        socket.close();
     }
 }

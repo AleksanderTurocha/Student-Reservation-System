@@ -1,14 +1,12 @@
-import java.net.*;
-import java.io.*;
-import java.util.Date;
-import java.util.List;
-
-import model.*;
-import org.hibernate.*;
+import model.Student;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.query.Query;
 
-import static java.lang.Integer.parseInt;
+import java.io.*;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class Server {
     public static void main(String[] args) throws IOException {
@@ -31,7 +29,7 @@ public class Server {
 
     private static void handleRequest(Socket socket) {
         try {
-            while(true) {
+            while (true) {
                 SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
                 Session session = sessionFactory.openSession();
 
@@ -54,12 +52,17 @@ public class Server {
 
                     transaction.commit();
                     session.close();
-                    System.out.println("Sesja zamknieta, student zapisany");
+
                     out.println("Created new student");
+                } else if (words[0].equals("0")){ //musi byc do zamknicia
+                    System.out.println("Sesja zamknieta, student zapisany");
+
+                    System.out.println("Sesja zamknieta przez serwe poniewaz uzytkonik opuscil polaczenie");
+                    socket.close();
                 }
                 // Create new room
-//                else if (words[0].equals("2"))
-//                {
+                else if (words[0].equals("2"))
+                {
 //                    session.beginTransaction();
 //
 //                    Room room = new Room();
@@ -71,7 +74,8 @@ public class Server {
 //                    session.close();
 //
 //                    out.println("Created new room");
-//                }
+                    System.out.println("wybor 2 pisze serwer");
+                }
                 // Create new dormitory
 //                else if(words[0].equals("3"))
 //                {
@@ -136,31 +140,23 @@ public class Server {
 //                    dout.flush();
 //                }
 //                // Find student
-//                else if (words[0].equals("7"))
-//                {
-//                    DataOutputStream dout=new DataOutputStream(socket.getOutputStream());
-//
-//                    // TODO jak to rozpisac
-//                    //7;"Kuba";"Halucha"
-//                    String hql = "Select s.firstName from Student as s where s.firstName= :firstName AND s.lastName=:lastName";
-//
-//                    query.setParameter("name", words[1]);
-//
-//                    List<Student> studentList = query.list();
-//                    String response = "";
-//
-//                    if(studentList.isEmpty())
-//                        response = "There is no such a student";
-//                    else {
-//                        System.out.println("Student found:");
-//                        for (Student student : studentList) {
-//                            response += student.getId() + " - " + student.getFirstName() + " " + student.getLastName() + "\n";
-//                        }
-//                    }
-//
-//                    dout.writeUTF(response);
-//                    dout.flush();
-//                }
+                else if (words[0].equals("7"))
+                {
+                    DataOutputStream dout=new DataOutputStream(socket.getOutputStream());
+                    StringBuilder response = new StringBuilder();
+//                    Transaction transaction = session.beginTransaction();
+                    session.createQuery("Select s from Student as s where s.firstName= :firstName AND s.lastName=:lastName", Student.class)
+                            .setParameter("firstName", words[1])
+                            .setParameter("lastName", words[2])
+                            .getResultList()
+                            .forEach(student->response.append(student));
+
+//                    transaction.commit();
+                    dout.writeUTF(response.toString());
+                    dout.flush();
+                    session.close();
+                    out.println("Zwrocilem wyszukanego studenta");
+                }
 //                // TODO assign student to dormitory and room?
 //                else if(words[0].equals("8"))
 //                {
@@ -182,13 +178,13 @@ public class Server {
 //                }
             }
         } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                socket.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
+            e.printStackTrace();}
+//        } finally {
+//            try {
+//                socket.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
     }
 }

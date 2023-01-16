@@ -8,7 +8,6 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Entity
 //@Table(name = "students")
 public class Student {
@@ -23,4 +22,13 @@ public class Student {
     @ManyToOne
     @JoinColumn(name = "room_id")
     private Room room;
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                '}';
+    }
 }

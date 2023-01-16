@@ -9,7 +9,6 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Entity
 //@Table(name="rooms")
 public class Room {
@@ -20,5 +19,7 @@ public class Room {
 
     @OneToMany(mappedBy = "room")
     private List<Student> students;
+
+
 
 }

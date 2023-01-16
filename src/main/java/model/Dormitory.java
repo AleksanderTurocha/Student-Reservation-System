@@ -9,7 +9,6 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
 @Entity
 //@Table(name = "dormitories")
 public class Dormitory {
@@ -21,4 +20,6 @@ public class Dormitory {
     @OneToMany
     @JoinColumn(name = "room_id")
     private List<Room> rooms;
+
+
 }
