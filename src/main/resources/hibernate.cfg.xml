@@ -3,15 +3,17 @@
  <hibernate-configuration>
     <session-factory>
         <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/db_name</property>
-        <property name="hibernate.connection.username">db_user</property>
-        <property name="hibernate.connection.password">db_pass</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/reservationsystem</property>
+        <property name="hibernate.connection.username">root</property>
+        <property name="hibernate.connection.password">Katar987</property>
+        <property name="hibernate.hbm2ddl.auto">create-drop</property>
         <property name="hibernate.show_sql">true</property>
         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+        <property name="hibernate.format_sql">true</property>
 
-        <mapping class="database.Dormitory" />
-        <mapping class="database.Room" />
-        <mapping class="database.Student" />
+        <mapping class="model.Dormitory" />
+        <mapping class="model.Room" />
+        <mapping class="model.Student" />
     </session-factory>
 </hibernate-configuration>
 

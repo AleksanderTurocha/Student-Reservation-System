@@ -1,4 +1,4 @@
-package database;//package database;
+package model;//package database;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,17 +8,19 @@ import lombok.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 @ToString
-@Entity(name = "Students")
+@Entity
+//@Table(name = "students")
 public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String firstName;
     private String lastName;
-    @OneToOne
+    @ManyToOne()
     private Dormitory dormitory;
+
     @ManyToOne
+    @JoinColumn(name = "room_id")
     private Room room;
 }
