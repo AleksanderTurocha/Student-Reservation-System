@@ -16,24 +16,24 @@ public class Client {
         while (true) {
             System.out.println("Menu:");
             System.out.println("1 - Create new Student");
-//            System.out.println("2 - Create new Room");
-//            System.out.println("3 - Create new Dormitory");
-//            System.out.println("4 - Display students");
-//            System.out.println("5 - Display rooms");
-//            System.out.println("6 - Display dormitories");
-//            System.out.println("7 - Find student");
-//            System.out.println("8 - Assign student to room and dormitory");
-//            System.out.println("9 - Delete student");
+            System.out.println("2 - Create new Room");
+            System.out.println("3 - Create new Dormitory");
+            System.out.println("4 - Display students");
+            System.out.println("5 - Display rooms");
+            System.out.println("6 - Display dormitories");
+            System.out.println("7 - Find student");
+            System.out.println("8 - Assign student to room and dormitory");
+            System.out.println("9 - Delete student");
             System.out.println("0 - Exit program");
 
 
             int choice = scanner.nextInt();
-            scanner.nextLine();
+
             // Creating new student
             if (choice == 1) {
                 System.out.println("Create new student:");
                 System.out.println("Input first name: ");
-
+                scanner.nextLine();
                 String firstName = scanner.nextLine();
 
                 System.out.println("Input last name: ");
@@ -47,15 +47,16 @@ public class Client {
             }
 //            // Creating new room
             else if (choice == 2) {
-                System.out.println("wybor drigi pisze client");
-                out.println("2");
-//                System.out.println("Input door number: ");
-//                long doorNumber = scanner.nextLong();
-//
-//                out.println("Created new room: " + doorNumber);
-//
-//                String response = in.readLine();
-//                System.out.println(response);
+                System.out.println("Create new room:");
+                System.out.println("Input door number: ");
+                scanner.nextLine();
+                Long doorNumber = scanner.nextLong();
+                System.out.println("wysylam do serwera");
+                System.out.println("2;" + doorNumber);
+                out.println("2;" + doorNumber);
+
+                String response = in.readLine();
+                System.out.println(response + "<-wiadomosc od serwera");
             }
 //            // Creating new dormitory
             else if (choice == 3) {
@@ -95,6 +96,7 @@ public class Client {
             }
             // Find student
             else if (choice == 7) {
+                scanner.nextLine();
                 System.out.println("Input first name: ");
                 String name = scanner.nextLine();
                 System.out.println("Input last name:");
@@ -102,16 +104,27 @@ public class Client {
 
                 out.println("7;" + name + ";" + lastName);
 
-                DataInputStream din=new DataInputStream(socket.getInputStream());
-                String responseData=din.readUTF();
-                System.out.println("Server response:\n"+responseData);
+                DataInputStream din = new DataInputStream(socket.getInputStream());
+                String responseData = din.readUTF();
+                System.out.println("Server response:\n" + responseData);
 
                 String response = in.readLine();
                 System.out.println(response + "<-randomowa wiadomosc od serwera");
             }
             // Assign student to room and dormitory
             else if (choice == 8) {
-                //TODO wnetrze
+                scanner.nextLine();
+                System.out.println("Assigning student to room:");
+                System.out.println("Input first name: ");
+                String firstName = scanner.nextLine();
+                System.out.println("Input last name: ");
+                String lastName = scanner.nextLine();
+                System.out.println("Input doorNumber: ");
+                String doorNumber = scanner.nextLine();
+                System.out.println("1;" + firstName + ";" + lastName + ";" + doorNumber);
+                out.println("8;" + firstName + ";" + lastName + ";" + doorNumber);
+
+
             }
             // Delete student
             else if (choice == 9) {

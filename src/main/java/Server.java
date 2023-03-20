@@ -1,4 +1,6 @@
+import model.Room;
 import model.Student;
+import model.Dormitory;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -7,6 +9,7 @@ import org.hibernate.cfg.Configuration;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Optional;
 
 public class Server {
     public static void main(String[] args) throws IOException {
@@ -56,41 +59,39 @@ public class Server {
                     out.println("Created new student");
                 } else if (words[0].equals("0")){ //musi byc do zamknicia
                     System.out.println("Sesja zamknieta, student zapisany");
-
-                    System.out.println("Sesja zamknieta przez serwe poniewaz uzytkonik opuscil polaczenie");
                     socket.close();
                 }
                 // Create new room
                 else if (words[0].equals("2"))
                 {
-//                    session.beginTransaction();
-//
-//                    Room room = new Room();
-//                    room.setDoorNumber(Long.getLong(words[1]));
-//
-//                    session.save(room);
-//
-//                    session.getTransaction().commit();
-//                    session.close();
-//
-//                    out.println("Created new room");
-                    System.out.println("wybor 2 pisze serwer");
+                    session.beginTransaction();
+
+                    Room room = new Room();
+                    room.setDoorNumber(Long.valueOf(words[1]));
+
+                    session.save(room);
+
+                    session.getTransaction().commit();
+                    session.close();
+
+                    out.println("Created new room");
                 }
                 // Create new dormitory
-//                else if(words[0].equals("3"))
-//                {
-//                    session.beginTransaction();
-//
-//                    Dormitory dormitory = new Dormitory();
-//                    dormitory.setName(words[1]);
-//                    dormitory.setStandard(words[2]);
-//                    session.save(dormitory);
-//
-//                    session.getTransaction().commit();
-//                    session.close();
-//
-//                    out.println("Created new dormitory");
-//                }
+                else if(words[0].equals("3"))
+                {
+                    session.beginTransaction();
+
+                    Dormitory dormitory = new Dormitory();
+                    dormitory.setName(words[1]);
+                    dormitory.setStandard(words[2]);
+
+                    session.save(dormitory);
+
+                    session.getTransaction().commit();
+                    session.close();
+
+                    out.println("Created new dormitory");
+                }
 //                // Display students
 //                else if (words[0].equals("4"))
 //                {
@@ -157,11 +158,41 @@ public class Server {
                     session.close();
                     out.println("Zwrocilem wyszukanego studenta");
                 }
-//                // TODO assign student to dormitory and room?
-//                else if(words[0].equals("8"))
-//                {
-//
-//                }
+               // assign student to room
+                else if(words[0].equals("8"))
+                {
+                    session.beginTransaction();
+                    Optional<Room> optionalRoom = session.createQuery("Select r from Room as r where r.doorNumber=:doorNumber", Room.class)
+                            .setParameter("doorNumber", words[3])
+                            .getResultList()
+                            .stream()
+                            .findFirst();
+                    Optional<Student> optionalStudent = session.createQuery("Select s from Student as s where s.firstName= :firstName AND s.lastName=:lastName", Student.class)
+                            .setParameter("firstName", words[1])
+                            .setParameter("lastName", words[2])
+                            .getResultList()
+                            .stream()
+                            .findFirst();
+                    if(optionalStudent.isPresent()){
+                        Student student = optionalStudent.get();
+                        if(optionalRoom.isPresent()){
+                            Room room = optionalRoom.get();
+                            student.setRoom(room);
+                            session.save(student);
+                            session.save(room);
+                        } else {
+                            //jesli pokoj nie istnieje
+                        }
+                    }else {
+                        //jesli nie istnieje
+                    }
+
+                    session.getTransaction().commit();
+                    session.close();
+
+                    System.out.println("student przypisany");
+                    session.close();
+                }
 //                // Delete student
 //                else if(words[0].equals("9"))
 //                {
